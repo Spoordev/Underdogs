@@ -6,53 +6,67 @@
     <title>Underdogs • $Poor • Underpups</title>
     <!-- Link for favicon -->
     <link rel="icon" href="https://ipfs.io/ipfs/QmTWn3Ye9kUKjmggp8HNsjM9cUPM3NC4ekq1KxRhP6SbSA" type="image/x-icon">
-<style>
-    body, html {
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-    background-color: #ED1C24;
-    }
     
+
+<style>
+   body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+body {
+    background-color: #ED1C24;
+}
+
+.container {
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+    width: calc(100% - 40px); /* Full width with 20px margin on each side */
+    max-width: 100%;
+}
+
+.container img {
+    width: calc(100% / 20);
+    height: auto;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.pair-info {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.pair-info p {
+    margin: 5px 0;
+}
+
+@media screen and (max-width: 768px) {
     .container {
-        box-sizing: border-box;
-        float: left;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: rgba(0, 0, 0, 0.5);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        margin: 10px;
+        width: calc(50% - 20px);
     }
+}
 
-    .left-container, .middle-container {
-        width: calc(37.5% - 40px); /* 75% of the screen width minus margins */
+@media screen and (max-width: 480px) {
+    .container {
+        width: calc(100% - 20px);
     }
+}
 
-    .right-container {
-        width: calc(27% - 40px); /* 25% of the screen width minus margins */
-    }
-
-    .container img {
-        width: calc(100% / 20); /* 20 images per row */
-        height: auto;
-        border: 1px solid #ddd;
-        box-sizing: border-box;
-    }
-
-    .pair-info {
-        background-color: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
-        padding: 20px;
-        border-radius: 10px;
-    }
-
-    .pair-info p {
-        margin: 5px 0;
-    }
 </style>
 </head>
 <body>
+
 <div class="container left-container" id="imageContainer1">
     <!-- Images for container 1 will be generated here -->
 </div>
