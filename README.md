@@ -6,7 +6,7 @@
     <title>Pixel Grid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #ED1C24;
@@ -16,12 +16,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: "Pixelify Sans", sans-serif; /* Apply custom font */
+            font-family: "Silkscreen", sans-serif; /* Apply custom font */
             color: white; /* Set text color */
         }
-        h1 {
-            font-size: 48px; /* Adjust font size for the title */
-            margin-bottom: 20px; /* Add margin to the bottom of the title */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(32, 20px); /* Adjust width based on pixel size */
+            grid-template-rows: repeat(32, 20px); /* Adjust height based on pixel size */
+            gap: 0; /* No gap between pixels */
+            margin-bottom: 20px; /* Add margin to the bottom of the grid */
         }
         .pixel {
             width: 20px; /* Change width to make pixels larger */
@@ -31,16 +34,16 @@
             box-sizing: border-box;
             margin: -1px;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(32, 20px); /* Adjust width based on pixel size */
-            grid-template-rows: repeat(32, 20px); /* Adjust height based on pixel size */
-            gap: 0; /* No gap between pixels */
+        h1 {
+            font-size: 48px; /* Set font size for the title */
+            font-weight: 700; /* Set font weight for the title */
+            margin: 0; /* Remove default margin */
+            display: inline-block; /* Ensure each letter is treated as a separate block */
         }
     </style>
 </head>
 <body>
-    <h1>ThomASScott</h1> <!-- Title -->
+    <h1 id="title">ThomASScott</h1> <!-- Title -->
 
     <div class="grid" id="pixelGrid"></div>
 
@@ -68,12 +71,29 @@
                 gridContainer.appendChild(pixel);
 
                 // Set color for each pixel
-                setPixelColor(pixel, pixelColors[colorIndex]);
+                const color = pixelColors[colorIndex];
+                setPixelColor(pixel, color);
 
                 // Increment colorIndex and loop back to the beginning if needed
                 colorIndex = (colorIndex + 1) % pixelColors.length;
             }
         }
+
+        // Function to set the color of each letter in the title
+        function setColorForTitleLetters() {
+            const titleElement = document.getElementById("title");
+            const titleText = titleElement.innerText;
+            const titleLetters = titleText.split('');
+            titleLetters.forEach((letter, index) => {
+                const colorIndex = index % pixelColors.length;
+                const color = pixelColors[colorIndex];
+                titleLetters[index] = `<span style="color: ${color};">${letter}</span>`;
+            });
+            titleElement.innerHTML = titleLetters.join('');
+        }
+
+        // Call the function to set colors for each letter in the title
+        setColorForTitleLetters();
     </script>
 </body>
 </html>
