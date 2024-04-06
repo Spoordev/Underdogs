@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>100x100 Grid of Random Colours</title>
+<title>Refresh Grid</title>
+<link rel="icon" href="https://ipfs.io/ipfs/QmcXRu9ZWwH3chUSJipNpwQXQPRcfPzTPPyk7pdDy49kEn" type="image/x-icon">
 <style>
     body {
         display: flex;
@@ -19,22 +20,24 @@
         height: 7px; /* Each pixel is 7x7 pixels (5px for the pixel + 1px border on each side) */
         display: inline-block;
         margin: 0;
-        font-size: 12px;
+        font-size: 30px; /* Reduced font size by half */
+        font-family: "Pixelify Sans", sans-serif; /* Apply custom font to pixels */
     }
 
     .refresh-button {
-        position: relative; /* Position relative for absolute positioning of borders */
-        font-size: 20px;
+        font-size: 50px; /* Reduced font size by half */
         font-weight: bold;
-        padding: 15px 30px; /* Increased padding for larger button */
+        padding: 37.5px 75px; /* Reduced padding for smaller button */
         background-color: #4CAF50; /* Green color */
         color: white;
-        border: 2px solid black; /* Set border */
+        border: 2px solid black; /* Set black border */
+        border-radius: 37.5px; /* Rounded corners */
         cursor: pointer;
         text-decoration: none;
-        border-radius: 15px; /* Rounded corners */
+        position: relative; /* Required for absolute positioning of pseudo-elements */
+        overflow: hidden; /* Ensure pseudo-elements stay within button boundaries */
         transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s; /* Smooth transition on hover */
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Add shadow */
+        font-family: "Pixelify Sans", sans-serif; /* Apply custom font to button */
     }
 
     .refresh-button::before,
@@ -45,28 +48,23 @@
         height: 100%;
         top: 0;
         left: 0;
-        border: 1px solid black; /* Set border */
-        border-radius: 15px; /* Match button's border radius */
         z-index: -1; /* Behind the button content */
     }
 
-    .refresh-button::after {
-        content: "";
-        width: calc(100% + 2px);
-        height: calc(100% + 2px);
-        top: -1px;
-        left: -1px;
-        border: 1px solid black; /* Set border */
-        border-radius: 15px; /* Match button's border radius */
-        z-index: -2; /* Behind the white border */
+    .refresh-button::before {
+        border: 5px solid white; /* Set white border with increased thickness */
+        border-radius: 37.5px; /* Match button's border radius */
     }
 
     .refresh-button:hover {
         background-color: #45a049; /* Darker green color on hover */
-        box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+        box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
         border-color: #45a049; /* Darker green color on hover */
     }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
     <script>
@@ -100,3 +98,4 @@
     <button class="refresh-button" onclick="window.location.reload();">Refresh</button>
 </body>
 </html>
+s
