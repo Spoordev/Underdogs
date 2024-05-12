@@ -13,6 +13,20 @@
             height: 100vh;
             margin: 0;
             background-color: black; /* Set background color to black */
+            overflow: hidden; /* Hide overflow to prevent scrollbar */
+        }
+
+        .content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: -1;
         }
 
         .pixel {
@@ -96,6 +110,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="content">
+        <canvas id="pixelCanvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: -1;"></canvas>
+
+        <div class="container">
+            <div class="item">
+                <img src="https://ipfs.io/ipfs/QmZuRXaR3vZzU5JnWB6ewkcqqANhboY5YBnLATCJEN3MbY" alt="Description of the image" style="width: 100%;">
+            </div>
+            
+            <div class="item">
+                <button class="refresh-button" onclick="window.location.reload();">reFresh</button>
+            </div>
+            <div class="item">
+                <iframe src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x744556F5ec8c78757eeE117683f5E6188A1e757f&chain=%7B%22name%22%3A%22Magma%3AOnyx%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Fturbo.magma-rpc.com%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22Lava%22%2C%22name%22%3A%22Lava%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22magmaonyx%22%2C%22chainId%22%3A6969696969%2C%22testnet%22%3Afalse%2C%22slug%22%3A%22magmaonyx%22%2C%22icon%22%3A%7B%22url%22%3A%22%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=b4d55fcd816e88253fe6f65c17b0d0a4&theme=dark&primaryColor=teal" width="700px" height="700px" style="max-width:80%;" frameborder="0"></iframe>
+            </div>
+            <!-- Updated Magmascan link -->
+            <a href="https://magmascan.org/token/0x744556F5ec8c78757eeE117683f5E6188A1e757f" class="magmascan-link">Magmascan</a>
+        </div>
+    </div>
+
     <script>
         // Create a 100x100 grid of pixels with random colors
         let canvas = document.createElement('canvas');
@@ -124,19 +157,73 @@
         // Set the generated PNG as the body background
         document.body.style.backgroundImage = `url(${imageDataURL})`;
     </script>
-    <header>
-        <img src="https://ipfs.io/ipfs/QmZuRXaR3vZzU5JnWB6ewkcqqANhboY5YBnLATCJEN3MbY" alt="Description of the image" style="width: 60%;">
-    </header>
- 
-        
-        <div class="item">
-            <button class="refresh-button" onclick="window.location.reload();">reFresh</button>
-        </div>
-        <div class="item">
-            <iframe src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x744556F5ec8c78757eeE117683f5E6188A1e757f&chain=%7B%22name%22%3A%22Magma%3AOnyx%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Fturbo.magma-rpc.com%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22Lava%22%2C%22name%22%3A%22Lava%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22magmaonyx%22%2C%22chainId%22%3A6969696969%2C%22testnet%22%3Afalse%2C%22slug%22%3A%22magmaonyx%22%2C%22icon%22%3A%7B%22url%22%3A%22%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=b4d55fcd816e88253fe6f65c17b0d0a4&theme=dark&primaryColor=teal" width="700px" height="700px" style="max-width:80%;" frameborder="0"></iframe>
-        </div>
-        <!-- Updated Magmascan link -->
-        <a href="https://magmascan.org/token/0x744556F5ec8c78757eeE117683f5E6188A1e757f" class="magmascan-link">Magmascan</a>
-    </div>
+
+    <script>
+        // Create canvas and context for rain animation
+        let canvasRain = document.createElement('canvas');
+        canvasRain.width = window.innerWidth;
+        canvasRain.height = window.innerHeight;
+        document.body.appendChild(canvasRain);
+        let ctxRain = canvasRain.getContext('2d');
+
+        // Define array to store raindrop positions
+        let raindrops = [];
+
+        // Constants
+        const gravity = 0.1; // Gravity value to simulate piling up effect
+        const spawnInterval = 5; // Milliseconds between each spawn
+
+        // Function to create a new raindrop
+        function createRaindrop() {
+            let initialX = Math.random() * canvasRain.width;
+            let initialY = -5; // Spawn raindrops just above the canvas
+            let speed = (Math.random() * 3 + 1) / 2; // Random speed between 0.5 and 2 pixels per frame
+            let color = Math.random() < 0.5 ? 'white' : '#d04421'; // Randomly choose between white and red
+
+            raindrops.push({
+                x: initialX,
+                y: initialY,
+                speed: speed,
+                color: color,
+            });
+        }
+
+        // Function to change the direction of raindrops
+        function changeDirection() {
+            raindrops.forEach(raindrop => {
+                raindrop.speed *= -1; // Reverse the direction of each raindrop
+            });
+        }
+
+        // Define animation function for rain
+        function animateRain() {
+            // Clear canvas
+            ctxRain.clearRect(0, 0, canvasRain.width, canvasRain.height);
+
+            // Move and draw each raindrop
+            raindrops.forEach((raindrop, index) => {
+                // Move raindrop downward
+                raindrop.y += raindrop.speed;
+
+                // Draw raindrop with color
+                ctxRain.fillStyle = raindrop.color;
+                ctxRain.fillRect(raindrop.x, raindrop.y, 2, 2); // Adjust size to simulate raindrops
+
+                // Remove raindrops that have fallen off the screen
+                if (raindrop.y > canvasRain.height) {
+                    raindrops.splice(index, 1);
+                }
+            });
+
+            // Request next frame of animation
+            requestAnimationFrame(animateRain);
+        }
+
+        // Start rain animation
+        animateRain();
+
+        // Set interval to spawn new raindrops
+        setInterval(createRaindrop, spawnInterval);
+    </script>
 </body>
 </html>
