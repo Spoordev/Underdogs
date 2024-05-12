@@ -114,6 +114,24 @@
             pointer-events: none;
             z-index: -1;
         }
+
+        /* New class for the reverse button */
+        .reverse-button {
+            font-size: 50px; /* Set font size */
+            font-weight: bold;
+            padding: 37.5px 75px; /* Set padding */
+            background-color: #d04421; /* Red color */
+            color: white;
+            border: 2px solid black; /* Set border */
+            border-radius: 37.5px; /* Rounded corners */
+            cursor: pointer;
+            text-decoration: none;
+            position: relative; /* Required for absolute positioning of pseudo-elements */
+            overflow: hidden; /* Ensure pseudo-elements stay within button boundaries */
+            transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s; /* Smooth transition on hover */
+            font-family: "Pixelify Sans", sans-serif; /* Apply custom font to button */
+            margin-top: 20px; /* Add margin top */
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,9 +146,9 @@
                 <img src="https://ipfs.io/ipfs/Qmd7HJq9negUL9b8GSXsF1bJkkPeVWFtTzV7WAtqV6gQGV" alt="Description of the image" style="width: 100%;">
             </div>
             
-            <div class="item">A
-                
-                <button class="refresh-button" onclick="window.location.reload();">reFresh</button>
+            <div class="item">
+                <button class="refresh-button" onclick="refreshBackground()">reFresh</button>
+                <button class="reverse-button" onclick="reverseRain()">reVerse</button>
             </div>
             <div class="item">
                 <div style="height: 20px;"></div> <!-- Buffer above refresh button -->
@@ -148,54 +166,40 @@
     <canvas id="rainCanvas"></canvas>
 
     <script>
-        // Create a 100x100 grid of pixels with random colors
         let canvas = document.createElement('canvas');
-        canvas.width = 700; // 100 * 7 (pixel size)
-        canvas.height = 700; // 100 * 7 (pixel size)
+        canvas.width = 700;
+        canvas.height = 700;
         let ctx = canvas.getContext('2d');
 
-        // Set canvas background color to black
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         for (let i = 0; i < 100; i++) {
             for (let j = 0; j < 100; j++) {
-                // Generate a random color
                 let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                // Set the pixel color
                 ctx.fillStyle = randomColor;
-                // Draw the pixel
-                ctx.fillRect(j * 7 + 1, i * 7 + 1, 5, 5);
+                ctx.fillRect(j * 7 + 1, i * 7 + 1, 5, 5); 
             }
         }
 
-        // Convert canvas to base64-encoded PNG
         let imageDataURL = canvas.toDataURL('image/png');
-
-        // Set the generated PNG as the body background
         document.body.style.backgroundImage = `url(${imageDataURL})`;
-    </script>
 
-    <script>
-        // Create canvas and context for rain animation
         let canvasRain = document.getElementById('rainCanvas');
         canvasRain.width = window.innerWidth;
         canvasRain.height = window.innerHeight;
         let ctxRain = canvasRain.getContext('2d');
 
-        // Define array to store raindrop positions
         let raindrops = [];
 
-        // Constants
-        const gravity = 0.1; // Gravity value to simulate piling up effect
-        const spawnInterval = 5; // Milliseconds between each spawn
+        const gravity = 0.1; 
+        const spawnInterval = 1;
 
-        // Function to create a new raindrop
         function createRaindrop() {
             let initialX = Math.random() * canvasRain.width;
-            let initialY = -5; // Spawn raindrops just above the canvas
-            let speed = (Math.random() * 3 + 1) / 2; // Random speed between 0.5 and 2 pixels per frame
-            let color = Math.random() < 0.5 ? 'white' : '#d04421'; // Randomly choose between white and red
+            let initialY = -5;
+            let speed = (Math.random() * 3 + 1) / 2; 
+            let color = Math.random() < 0.5 ? 'white' : '#d04421'; 
 
             raindrops.push({
                 x: initialX,
@@ -205,41 +209,46 @@
             });
         }
 
-        // Function to change the direction of raindrops
-        function changeDirection() {
+        function refreshBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < 100; i++) {
+                for (let j = 0; j < 100; j++) {
+                    let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    ctx.fillStyle = randomColor;
+                    ctx.fillRect(j * 7 + 1, i * 7 + 1, 5, 5); 
+                }
+            }
+
+            imageDataURL = canvas.toDataURL('image/png');
+            document.body.style.backgroundImage = `url(${imageDataURL})`;
+        }
+
+        function reverseRain() {
             raindrops.forEach(raindrop => {
-                raindrop.speed *= -1; // Reverse the direction of each raindrop
+                raindrop.speed *= -1; 
             });
         }
 
-        // Define animation function for rain
         function animateRain() {
-            // Clear canvas
             ctxRain.clearRect(0, 0, canvasRain.width, canvasRain.height);
 
-            // Move and draw each raindrop
             raindrops.forEach((raindrop, index) => {
-                // Move raindrop downward
                 raindrop.y += raindrop.speed;
 
-                // Draw raindrop with color
                 ctxRain.fillStyle = raindrop.color;
-                ctxRain.fillRect(raindrop.x, raindrop.y, 2, 2); // Adjust size to simulate raindrops
+                ctxRain.fillRect(raindrop.x, raindrop.y, 2, 2); 
 
-                // Remove raindrops that have fallen off the screen
                 if (raindrop.y > canvasRain.height) {
                     raindrops.splice(index, 1);
                 }
             });
 
-            // Request next frame of animation
             requestAnimationFrame(animateRain);
         }
 
-        // Start rain animation
         animateRain();
 
-        // Set interval to spawn new raindrops
         setInterval(createRaindrop, spawnInterval);
     </script>
 </body>
