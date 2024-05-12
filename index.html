@@ -64,6 +64,7 @@
 
         .container {
             text-align: center; /* Center the content */
+            margin-top: 20px; /* Add space above the container */
         }
 
         .item {
@@ -85,51 +86,57 @@
         .magmascan-link:hover {
             text-shadow: 0 0 0 transparent, 0 0 20px #d04421; /* Change text shadow on hover */
         }
+        .item img.small-image {
+            max-width: 100%; /* Limit the width to the width of its container */
+            height: auto; /* Maintain aspect ratio */
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
-<script>
-    // Create a 100x100 grid of pixels with random colors
-    let canvas = document.createElement('canvas');
-    canvas.width = 700; // 100 * 7 (pixel size)
-    canvas.height = 700; // 100 * 7 (pixel size)
-    let ctx = canvas.getContext('2d');
+    <script>
+        // Create a 100x100 grid of pixels with random colors
+        let canvas = document.createElement('canvas');
+        canvas.width = 700; // 100 * 7 (pixel size)
+        canvas.height = 700; // 100 * 7 (pixel size)
+        let ctx = canvas.getContext('2d');
 
-    // Set canvas background color to black
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Set canvas background color to black
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < 100; i++) {
-        for (let j = 0; j < 100; j++) {
-            // Generate a random color
-            let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-            // Set the pixel color
-            ctx.fillStyle = randomColor;
-            // Draw the pixel
-            ctx.fillRect(j * 7 + 1, i * 7 + 1, 5, 5);
+        for (let i = 0; i < 100; i++) {
+            for (let j = 0; j < 100; j++) {
+                // Generate a random color
+                let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                // Set the pixel color
+                ctx.fillStyle = randomColor;
+                // Draw the pixel
+                ctx.fillRect(j * 7 + 1, i * 7 + 1, 5, 5);
+            }
         }
-    }
 
-    // Convert canvas to base64-encoded PNG
-    let imageDataURL = canvas.toDataURL('image/png');
+        // Convert canvas to base64-encoded PNG
+        let imageDataURL = canvas.toDataURL('image/png');
 
-    // Set the generated PNG as the body background
-    document.body.style.backgroundImage = `url(${imageDataURL})`;
-</script>
-<div class="container">
-    <div><br></div>
-    <br>
-    <div class="item">
-        <button class="refresh-button" onclick="window.location.reload();">reFresh</button>
+        // Set the generated PNG as the body background
+        document.body.style.backgroundImage = `url(${imageDataURL})`;
+    </script>
+    <div class="container">
+        <div class="item">
+            <img src="https://ipfs.io/ipfs/QmZuRXaR3vZzU5JnWB6ewkcqqANhboY5YBnLATCJEN3MbY" alt="Description of the image" style="width: 100%;">
+        </div>
+        
+        <div class="item">
+            <button class="refresh-button" onclick="window.location.reload();">reFresh</button>
+        </div>
+        <div class="item">
+            <iframe src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x744556F5ec8c78757eeE117683f5E6188A1e757f&chain=%7B%22name%22%3A%22Magma%3AOnyx%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Fturbo.magma-rpc.com%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22Lava%22%2C%22name%22%3A%22Lava%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22magmaonyx%22%2C%22chainId%22%3A6969696969%2C%22testnet%22%3Afalse%2C%22slug%22%3A%22magmaonyx%22%2C%22icon%22%3A%7B%22url%22%3A%22%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=b4d55fcd816e88253fe6f65c17b0d0a4&theme=dark&primaryColor=teal" width="700px" height="700px" style="max-width:80%;" frameborder="0"></iframe>
+        </div>
+        <!-- Updated Magmascan link -->
+        <a href="https://magmascan.org/token/0x744556F5ec8c78757eeE117683f5E6188A1e757f" class="magmascan-link">Magmascan</a>
     </div>
-    <div class="item">
-        <iframe src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x744556F5ec8c78757eeE117683f5E6188A1e757f&chain=%7B%22name%22%3A%22Magma%3AOnyx%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Fturbo.magma-rpc.com%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22Lava%22%2C%22name%22%3A%22Lava%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22magmaonyx%22%2C%22chainId%22%3A6969696969%2C%22testnet%22%3Afalse%2C%22slug%22%3A%22magmaonyx%22%2C%22icon%22%3A%7B%22url%22%3A%22%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=b4d55fcd816e88253fe6f65c17b0d0a4&theme=dark&primaryColor=teal" width="700px" height="700px" style="max-width:80%;" frameborder="0"></iframe>
-    </div>
-    <!-- Updated Magmascan link -->
-    <a href="https://magmascan.org/token/0x744556F5ec8c78757eeE117683f5E6188A1e757f" class="magmascan-link">Magmascan</a>
-</div>
 </body>
 </html>
