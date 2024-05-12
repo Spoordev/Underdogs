@@ -26,15 +26,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between; /* Space between header, content, and footer */
-            z-index: -1;
+            z-index: 2; /* Ensure content is above the rain canvas */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overscroll-behavior: contain; /* Prevent scroll chaining */
         }
 
         .item {
-            margin-bottom: 20px; /* Add space between items */
+            /* margin-bottom: 20px; */ /* Remove margin to ensure the footer meets the bottom of the container */
         }
 
         .header {
-            width: 50%; /* Reduce width */
+            width: 33%; /* Reduce width */
             z-index: 3;
         }
 
@@ -42,6 +44,8 @@
             width: 50%; /* Reduce width */
             z-index: 1;
             position: relative; /* Ensure position is relative */
+            align-self: flex-end; /* Align footer to the bottom of the container */
+            margin-top: auto; /* Push footer to the bottom of the container */
         }
 
         .refresh-button {
@@ -87,7 +91,7 @@
             transition: text-shadow 0.3s; /* Smooth transition */
             font-family: "Pixelify Sans", sans-serif; /* Apply custom font to link */
             position: absolute; /* Required for positioning */
-            bottom: 20px; /* Adjust bottom spacing */
+            top: 20px; /* Adjust top spacing */
             left: 50%; /* Center horizontally */
             transform: translateX(-50%); /* Center horizontally */
         }
@@ -98,6 +102,17 @@
 
         .container {
             text-align: center; /* Center the content horizontally */
+            position: relative; /* Ensure proper stacking context */
+            z-index: 2; /* Ensure container is above the rain canvas */
+        }
+
+        /* Adjust rain canvas position */
+        #rainCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,22 +122,30 @@
 <body>
     <div class="content">
         <canvas id="pixelCanvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: -1;"></canvas>
-
+    
         <div class="container">
             <div class="item header">
                 <img src="https://ipfs.io/ipfs/QmZuRXaR3vZzU5JnWB6ewkcqqANhboY5YBnLATCJEN3MbY" alt="Description of the image" style="width: 100%;">
             </div>
             
             <div class="item">
+                
                 <button class="refresh-button" onclick="window.location.reload();">reFresh</button>
             </div>
             <div class="item">
-                <iframe src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x744556F5ec8c78757eeE117683f5E6188A1e757f&chain=%7B%22name%22%3A%22Magma%3AOnyx%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Fturbo.magma-rpc.com%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22Lava%22%2C%22name%22%3A%22Lava%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22magmaonyx%22%2C%22chainId%22%3A6969696969%2C%22testnet%22%3Afalse%2C%22slug%22%3A%22magmaonyx%22%2C%22icon%22%3A%7B%22url%22%3A%22%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=b4d55fcd816e88253fe6f65c17b0d0a4&theme=dark&primaryColor=teal" width="700px" height="700px" style="max-width:80%;" frameborder="0"></iframe>
+                <div style="height: 20px;"></div> <!-- Buffer above refresh button -->
+                <iframe src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x744556F5ec8c78757eeE117683f5E6188A1e757f&chain=%7B%22name%22%3A%22Magma%3AOnyx%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Fturbo.magma-rpc.com%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22Lava%22%2C%22name%22%3A%22Lava%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22magmaonyx%22%2C%22chainId%22%3A6969696969%2C%22testnet%22%3Afalse%2C%22slug%22%3A%22magmaonyx%22%2C%22icon%22%3A%7B%22url%22%3A%22%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=b4d55fcd816e88253fe6f65c17b0d0a4&theme=dark&primaryColor=teal" width="700px" height="700px" style="max-width:80%; position: relative; z-index: 2;" frameborder="0"></iframe>
             </div>
-            <!-- Updated Magmascan link -->
-            <a href="https://magmascan.org/token/0x744556F5ec8c78757eeE117683f5E6188A1e757f" class="magmascan-link footer">Magmascan</a>
+           
+            <div class="item" style="position: relative; z-index: 2;">
+                <div style="height: 20px;"></div> <!-- Buffer above Magmascan link -->
+                <a href="https://magmascan.org/token/0x744556F5ec8c78757eeE117683f5E6188A1e757f" class="magmascan-link">Magmascan</a>
+            </div>
         </div>
     </div>
+
+    <!-- Rain canvas -->
+    <canvas id="rainCanvas"></canvas>
 
     <script>
         // Create a 100x100 grid of pixels with random colors
@@ -155,10 +178,9 @@
 
     <script>
         // Create canvas and context for rain animation
-        let canvasRain = document.createElement('canvas');
+        let canvasRain = document.getElementById('rainCanvas');
         canvasRain.width = window.innerWidth;
         canvasRain.height = window.innerHeight;
-        document.body.appendChild(canvasRain);
         let ctxRain = canvasRain.getContext('2d');
 
         // Define array to store raindrop positions
