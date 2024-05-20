@@ -1,1 +1,1 @@
-$Mag • Inner Galactic
+reFresh • reVerse
